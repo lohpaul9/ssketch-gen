@@ -150,14 +150,7 @@ class Pix2PixModel(BaseModel):
                             ])
 
     def get_current_visuals(self):
-        real_A = util.tensor2im(self.real_A.detach())
-        fake_B = util.tensor2im(self.fake_B.detach())
-        if self.isTrain:
-            sel_B = self.real_B[:, self.min_idx[0], :, :]
-        else:
-            sel_B = self.real_B[:, 0, :, :]
-        real_B = util.tensor2im(sel_B.unsqueeze(1).detach())
-        return OrderedDict([('real_A', real_A), ('fake_B', fake_B), ('real_B', real_B)])
+        return OrderedDict([('fake_B', self.fake_B.detach())])
 
     def save(self, label):
         self.save_network(self.netG, 'G', label)
@@ -171,4 +164,7 @@ class Pix2PixModel(BaseModel):
         name, _ = os.path.splitext(os.path.basename(self.image_paths[0]))
         out_path = os.path.join(out_dir, name + self.opt.suffix + '.png')
         image_pil.save(out_path)
+
+    def get_batch_outputs(self):
+        return self.fake_B.detach()
        
