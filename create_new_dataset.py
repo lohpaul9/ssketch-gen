@@ -92,7 +92,7 @@ def create_difference_drawing_dataset():
 
     ## ---------------------------- BATCH GENERATION -------------------- ##
     
-    BATCH_SIZE = 2  # You can adjust this value
+    BATCH_SIZE = 100  # You can adjust this value
     
     # Process in batches
     for batch_idx in range(0, len(data), BATCH_SIZE):
@@ -134,7 +134,7 @@ def create_difference_drawing_dataset():
             if mask.size != target_size:
                 print(f"Resizing mask from {mask.size} to {target_size}")
                 mask = mask.resize(target_size, Image.NEAREST)  # NEAREST to preserve binary values
-                
+
             # convert to tensor
             mask = transforms.ToTensor()(mask)
 
@@ -179,6 +179,10 @@ def create_difference_drawing_dataset():
             
             print(f"sketch shape after mask application: {sketch.shape}")
             print(f"Sketch value range: [{sketch.min()}, {sketch.max()}]")
+
+            # binarize sketch
+            threshold = 128  
+            sketch = np.where(sketch > threshold, 255, 0).astype(np.uint8)
             
             # Save individual sketch
             sketch_img = Image.fromarray(sketch, mode='L')

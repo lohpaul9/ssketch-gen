@@ -3,13 +3,15 @@ channels:
 - anaconda
 - pytorch
 dependencies:
-- python=3.6
-- pytorch=0.4
+- python
+- pytorch
 - numpy
 - scipy
+- cudatoolkit=11.8
+- pip
 - pip:
   - torchvision
   - dominate
   - visdom
-  - Pillow==5.0.0
+  - Pillow
   - datasets
